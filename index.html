@@ -2,10 +2,97 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>71papahijo's Site</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>71papahijo</title>
+  <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-  <h1>Hi there 👋</h1>
-  <p>Welcome to my GitHub Pages site!</p>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="#home" class="logo">71papahijo</a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header id="home" class="hero">
+    <div class="hero-content">
+      <h1>Hi, I’m 71papahijo 👋</h1>
+      <p>I build projects at the intersection of math, code, and creativity.</p>
+      <a href="#projects" class="btn">See my work</a>
+    </div>
+  </header>
+
+  <!-- About -->
+  <section id="about" class="section">
+    <div class="container">
+      <h2>About Me</h2>
+      <p>
+        I’m passionate about math, research, and building interactive projects.  
+        This website is a place where I share my experiments, research, and ideas.  
+      </p>
+    </div>
+  </section>
+
+    <!-- Projects -->
+    <section id="projects" class="section alt-bg">
+    <div class="container">
+        <h2>Projects</h2>
+        <div class="projects-grid">
+        
+        <!-- First Project: Desmos Clock -->
+        <div class="project-card">
+            <iframe 
+            src="https://www.desmos.com/calculator/92d6bfa8fa?embed" 
+            width="100%" height="400" 
+            style="border: 1px solid #ccc; border-radius: 6px;"
+            frameborder="0">
+            </iframe>
+            <div class="project-info">
+            <h3>Interactive Clock</h3>
+            <p>
+                A simple clock built in Desmos.  
+                Uses a tick function:  
+                <code>t_{ick}(x) = r_{ot} → r_{ot} + \frac{x}{1000}\left(\frac{2\pi}{60}\right)</code>  
+                and can be manually tweaked using  
+                <code>r_{exactTime} = r_{ot} → T_{time}</code>.
+            </p>
+            <a href="projects/DesmosClock.html">Read more →</a>
+            </div>
+        </div>
+
+        </div>
+    </div>
+    </section>
+
+
+  <!-- Contact -->
+  <section id="contact" class="section">
+    <div class="container">
+      <h2>Contact</h2>
+      <p>Get in touch: <a href="mailto:you@example.com">you@example.com</a></p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 71papahijo</p>
+  </footer>
+
+  <script>
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href'))
+          .scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
 </body>
 </html>
