@@ -8,12 +8,13 @@
     * { box-sizing: border-box; }
 
     :root {
-      --bg: #f6f7fb;
-      --surface: #ffffff;
-      --text: #171717;
-      --muted: #5f6470;
-      --border: #d9dde7;
-      --shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+      --bg: #dfefff;
+      --bg-accent: #cfe4ff;
+      --surface: rgba(255, 255, 255, 0.72);
+      --text: #132033;
+      --muted: #4d6480;
+      --border: rgba(120, 160, 210, 0.35);
+      --shadow: 0 12px 30px rgba(60, 100, 160, 0.12);
       --radius: 16px;
       --max-width: 1200px;
     }
@@ -23,7 +24,10 @@
       font-family: Inter, "Segoe UI", Tahoma, sans-serif;
       line-height: 1.5;
       color: var(--text);
-      background: var(--bg);
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.65), transparent 35%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-accent) 100%);
+      background-attachment: fixed;
     }
 
     .container {
@@ -219,6 +223,11 @@
   </style>
 </head>
 <body>
+  <div class="page-bg">
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+  </div>
+  
   <nav class="navbar">
     <div class="container">
       <a href="#" class="logo">71papahijo</a>
