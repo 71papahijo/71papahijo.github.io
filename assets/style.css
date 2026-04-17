@@ -161,6 +161,38 @@ body {
   text-decoration: underline;
 }
 
+.page-bg {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.5;
+  transition: transform 0.1s linear;
+}
+
+.orb-1 {
+  width: 400px;
+  height: 400px;
+  background: rgba(255, 255, 255, 0.5);
+  top: 100px;
+  left: 10%;
+}
+
+.orb-2 {
+  width: 500px;
+  height: 500px;
+  background: rgba(150, 200, 255, 0.5);
+  top: 400px;
+  right: 8%;
+}
+
 /* Footer */
 footer {
   text-align: center;
