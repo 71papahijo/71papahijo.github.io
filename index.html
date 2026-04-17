@@ -285,7 +285,15 @@
         ]
       }
     ];
-
+     window.addEventListener("scroll", () => {
+      const y = window.scrollY;
+    
+      const orb1 = document.querySelector(".orb-1");
+      const orb2 = document.querySelector(".orb-2");
+    
+      if (orb1) orb1.style.transform = `translateY(${y * 0.2}px)`;
+      if (orb2) orb2.style.transform = `translateY(${y * 0.1}px)`;
+    });
     function createPreview(preview, title) {
       if (!preview) {
         return `<div class="canvas-placeholder">No preview for ${title}</div>`;
