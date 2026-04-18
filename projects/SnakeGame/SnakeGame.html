@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FPGA Snake Game | 71papahijo</title>
-
-  <!-- External CSS -->
   <link rel="stylesheet" href="./SnakeGame.css" />
 </head>
 
@@ -14,19 +12,22 @@
     <div class="container nav-inner">
       <a class="brand" href="https://71papahijo.github.io/index.html">← Back to Main Page</a>
       <div class="nav-links">
-        <a href="#overview">Overview</a>
+        <a href="#architecture">Architecture</a>
         <a href="#fsm">FSM States</a>
-        <a href="#hardware">Hardware</a>
-        <a href="#gallery">Gallery</a>
+        <a href="#constraints">Constraints</a>
       </div>
     </div>
   </nav>
 
   <main>
     <section class="hero">
-      <div class="container hero-grid">
+      <div class="container hero-stack">
+        <div class="card hero-media hero-media-large">
+          <img src="./apic5l.gif" alt="FPGA Snake Game demo GIF" />
+        </div>
+
         <div class="card hero-copy">
-          <div class="eyebrow">Digital Design • Verilog • VGA Output</div>
+          <div class="eyebrow">Digital Design • Verilog • FPGA</div>
           <h1>FPGA Snake Game</h1>
           <p>
             This project recreates Snake entirely in FPGA hardware, using a finite state machine to control game flow,
@@ -39,7 +40,7 @@
 
           <div class="hero-actions">
             <a class="btn btn-primary" href="#fsm">See FSM States</a>
-            <a class="btn btn-primary" href="#hardware">Resource Constraints</a>
+            <a class="btn btn-primary" href="#constraints">Resource Constraints</a>
           </div>
 
           <div class="tag-row">
@@ -49,108 +50,134 @@
             <span class="tag">Hardware Optimization</span>
           </div>
         </div>
-
-        <div class="card hero-media">
-          <img src="./apic5l.gif" alt="Snake Game Demo" />
-          <div class="caption">
-            Live gameplay running directly on FPGA hardware.
-          </div>
-        </div>
       </div>
     </section>
 
-    <section id="overview">
+    <section id="architecture" class="section-block">
       <div class="container">
-        <div class="section-head">
-          <h2>Project Overview</h2>
-          <p>
-            Modular FPGA design with movement logic, FSM control, apple generation, and VGA rendering.
-          </p>
-        </div>
+        <div class="card feature-card">
+          <div class="feature-text">
+            <div class="section-head">
+              <div>
+                <h2>Project Architecture</h2>
+                <p>
+                  The design is organized as a modular FPGA system. A top-level module connects the movement logic,
+                  game-state control, apple generation, and VGA rendering pipeline into one coordinated design.
+                </p>
+              </div>
+            </div>
 
-        <div class="overview-grid">
-          <div class="card overview-item">
-            <h3>Gameplay</h3>
-            <p>Snake grows by eating apples and ends based on FSM-controlled conditions.</p>
-          </div>
-
-          <div class="card overview-item">
-            <h3>Architecture</h3>
-            <p>Top module connects game logic, input, rendering, and timing.</p>
-          </div>
-
-          <div class="card overview-item">
-            <h3>Tradeoffs</h3>
-            <p>Reduced board size, limited snake length, and deterministic apple placement.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="fsm">
-      <div class="container">
-        <div class="section-head">
-          <h2>FSM State Design</h2>
-        </div>
-
-        <div class="state-grid">
-          <div class="card state-card">
-            <h3>Idle State</h3>
             <p>
-              Initializes the game, holds position, and waits for input.
+              This architecture made the project easier to build and debug because each subsystem had a clear role.
+              Input handling controls the snake direction, the FSM governs the overall game flow, apple logic controls
+              placement behavior, and the VGA module maps the game state onto the display output.
             </p>
-            <img src="./Idle.png" alt="Idle state" />
-          </div>
 
-          <div class="card state-card">
-            <h3>End State</h3>
             <p>
-              Stops gameplay and displays final condition when game ends.
+              Structuring the project this way also made it easier to refine individual pieces without redesigning
+              everything at once, which is especially important in hardware projects where logic usage and timing
+              constraints can quickly grow.
             </p>
-            <img src="./End.png" alt="End state" />
+          </div>
+
+          <div class="feature-visual">
+            <img src="./Diagram.png" alt="Project architecture diagram for the FPGA Snake Game" />
           </div>
         </div>
       </div>
     </section>
 
-    <section id="hardware">
-      <div class="container two-col">
-        <div class="card resource-card">
-          <h2>FPGA Size & LUT Usage</h2>
-          <p>
-            Early versions exceeded FPGA capacity (>110%). Final design fits within ~1,399 logic cells.
-          </p>
-          <ul>
-            <li>Reduced grid size</li>
-            <li>Limited snake length</li>
-            <li>FSM-based apple generation</li>
-          </ul>
-        </div>
-
-        <div class="card resource-card">
-          <h3>Challenges</h3>
-          <p>
-            Fixed bugs involving body shifting order and apple overlap.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section id="gallery">
+    <section id="fsm" class="section-block">
       <div class="container">
-        <div class="section-head">
-          <h2>Gallery</h2>
-        </div>
-
-        <div class="gallery-grid">
-          <div class="card gallery-card">
-            <h3>System Diagram</h3>
-            <img src="./Diagram.png" alt="System Diagram" />
+        <div class="card section-card">
+          <div class="section-head">
+            <div>
+              <h2>FSM States</h2>
+              <p>
+                The finite state machine controls when the system is waiting, when the game is actively running,
+                and when the game has reached a finished condition. Two important visible states are idle and end.
+              </p>
+            </div>
           </div>
 
-          <div class="card gallery-card">
-            <h3>Resource Limit</h3>
-            <img src="./logic-error.png" alt="Logic error" onerror="this.style.display='none'" />
+          <div class="state-grid">
+            <article class="state-panel">
+              <div class="state-text">
+                <h3>Idle State</h3>
+                <p>
+                  The idle state is the controlled starting point of the game. In this state, the system holds the
+                  initial setup, prevents unintended movement, and waits for valid player input before transitioning
+                  into active gameplay.
+                </p>
+                <ul class="state-list">
+                  <li>Sets a clean starting condition for the snake.</li>
+                  <li>Waits for player input before movement begins.</li>
+                  <li>Provides a stable transition into the running state.</li>
+                </ul>
+              </div>
+              <div class="state-image-wrap">
+                <img src="./Idle.png" alt="Idle state image" />
+              </div>
+            </article>
+
+            <article class="state-panel">
+              <div class="state-text">
+                <h3>End State</h3>
+                <p>
+                  The end state is reached once a finishing condition occurs. At that point, gameplay no longer updates
+                  normally, and the FSM holds the game in a final display state so the result is visible and stable.
+                </p>
+                <ul class="state-list">
+                  <li>Stops normal gameplay updates after the game ends.</li>
+                  <li>Shows a clear final condition to the player.</li>
+                  <li>Creates a reliable point for reset or restart.</li>
+                </ul>
+              </div>
+              <div class="state-image-wrap">
+                <img src="./End.png" alt="End state image" />
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="constraints" class="section-block">
+      <div class="container">
+        <div class="card section-card">
+          <div class="section-head">
+            <div>
+              <h2>Resource Constraints</h2>
+              <p>
+                One of the biggest challenges in the project was fitting the game logic into the available FPGA logic budget.
+              </p>
+            </div>
+          </div>
+
+          <div class="constraints-grid">
+            <div class="constraint-text">
+              <p>
+                Earlier versions of the design exceeded the available logic resources, which forced tradeoffs in the final
+                implementation. The board representation had to be reduced, the snake length had to be capped, and apple
+                generation had to move toward a more deterministic FSM-based approach.
+              </p>
+
+              <p>
+                These constraints shaped the final architecture. Instead of maximizing features first, the design had to
+                prioritize fitting within the FPGA while still preserving stable gameplay and clear state behavior.
+              </p>
+
+              <ul class="resource-list">
+                <li>Reduced grid size to lower logic usage.</li>
+                <li>Limited maximum snake length.</li>
+                <li>Simplified apple generation logic.</li>
+                <li>Focused on stable gameplay over extra features.</li>
+              </ul>
+            </div>
+
+            <div class="constraint-visual">
+              <img src="./logic-error.png" alt="Logic resource fitting screenshot" onerror="this.style.display='none'" />
+            </div>
           </div>
         </div>
       </div>
@@ -159,9 +186,8 @@
 
   <footer class="footer">
     <div class="container">
-      FPGA project demonstrating FSM control and hardware-constrained design.
+      FPGA project demonstrating finite state machine design, modular architecture, and hardware-constrained implementation.
     </div>
   </footer>
- 
 </body>
 </html>
