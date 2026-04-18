@@ -119,7 +119,7 @@ body {
 
 /* Hero */
 .hero {
-  min-height: calc(100vh - 72px);
+  min-height: calc(100vh - 80px);
   display: flex;
   align-items: center;
   padding: 5rem 0 3rem;
@@ -127,7 +127,7 @@ body {
 
 .hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) 320px;
+  grid-template-columns: 1fr auto;
   gap: 3rem;
   align-items: center;
 }
@@ -164,9 +164,9 @@ body {
 }
 
 .hero-photo-wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 280px;
+  height: 280px;
+  flex-shrink: 0;
 }
 
 .hero-photo {
@@ -439,8 +439,11 @@ footer {
   }
 
   .hero-photo {
-    width: 220px;
-    height: 220px;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
   }
 }
 
