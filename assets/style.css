@@ -166,7 +166,7 @@ body {
 .hero-photo-wrap {
   width: 200px;
   height: 200px;
-  flex-shrink: 0;
+  margin-left: -1rem;
 }
 
 .hero-photo {
