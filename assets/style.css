@@ -460,3 +460,62 @@ footer {
     gap: 0.75rem;
   }
 }
+
+.resume-block {
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 1.5rem 1.75rem;
+}
+
+.resume-block p {
+  margin: 0 0 0.8rem;
+  text-align: left;
+  max-width: none;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.resume-block p:last-child {
+  margin-bottom: 0;
+}
+
+.education-entry h3 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.education-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.education-degree {
+  margin-top: 0.35rem;
+  color: var(--text);
+}
+
+.education-date {
+  white-space: nowrap;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.skills-block p strong {
+  color: var(--text);
+}
+
+@media (max-width: 700px) {
+  .education-header {
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .education-date {
+    white-space: normal;
+  }
+}
