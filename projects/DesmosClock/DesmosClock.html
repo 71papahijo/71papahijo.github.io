@@ -4,53 +4,141 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Desmos Clock Project</title>
-  <link rel="stylesheet" href="../assets/style.css" />
+  <link rel="stylesheet" href="../../assets/style.css" />
+  <script src="https://www.desmos.com/api/v1.11/calculator.js?apiKey=desmos"></script>
+  <style>
+    .project-page {
+      padding-top: 2rem;
+    }
+
+    .project-page h1 {
+      margin-bottom: 1rem;
+    }
+
+    .project-page h2 {
+      margin: 2rem 0 1rem;
+    }
+
+    .project-page p {
+      margin-bottom: 1rem;
+      text-align: left;
+      max-width: none;
+    }
+
+    .clock-controls {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: end;
+      margin: 1.5rem 0;
+    }
+
+    .clock-controls label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .clock-controls input {
+      width: 120px;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font: inherit;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--text);
+    }
+
+    .clock-controls button {
+      cursor: pointer;
+    }
+
+    #calculator {
+      width: 100%;
+      height: 520px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: white;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .note-box {
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+  </style>
 </head>
 <body>
   <nav class="navbar">
     <div class="container">
-      <a href="../index.html" class="logo">← Back to Home</a>
+      <a href="../../index.html" class="logo">← Back to Home</a>
     </div>
   </nav>
 
   <main>
-    <section class="section">
-      <div class="container">
+    <section class="section project-page">
+      <div class="container narrow">
         <h1>Interactive Desmos Clock</h1>
         <p>
-          This project is a simple clock built in
-          <a href="https://www.desmos.com/" target="_blank" rel="noopener noreferrer">Desmos</a>.
-          It uses a dynamic tick function to move the hands, and can also be set manually.
+          This project is a clock built with Desmos. You can manually set the
+          minute and second values below and check whether the clock hands point
+          to the expected positions.
         </p>
 
-        <iframe
-          src="https://www.desmos.com/calculator/92d6bfa8fa?embed"
-          width="100%"
-          height="500"
-          style="border: 1px solid #ccc; border-radius: 6px;"
-          frameborder="0">
-        </iframe>
+        <div class="clock-controls">
+          <label for="minutesInput">
+            Minutes
+            <input type="number" id="minutesInput" min="0" max="59" value="15" />
+          </label>
+
+          <label for="secondsInput">
+            Seconds
+            <input type="number" id="secondsInput" min="0" max="59" value="30" />
+          </label>
+
+          <button class="btn btn-primary" id="setTimeButton" type="button">
+            Set Time
+          </button>
+        </div>
+
+        <div id="calculator"></div>
+
+        <div class="note-box">
+          <p>
+            The graph is static by default. It does not auto-run like a live clock.
+            It updates once when the page loads, and again only when you press
+            <strong>Set Time</strong>.
+          </p>
+        </div>
 
         <h2>How it Works</h2>
         <p>
-          The clock’s hands move according to the following tick function:
+          The second hand angle is based directly on the selected seconds value,
+          and the minute hand angle uses both minutes and seconds so it moves
+          proportionally.
         </p>
 
         <pre>
-t_{ick}(x) = r_{ot} → r_{ot} + (x/1000) * (2π / 60)
+\theta_s = 2\pi \frac{s}{60}
+\theta_m = 2\pi \frac{m + s/60}{60}
         </pre>
 
         <p>
-          You can also manually set the time:
+          This means the second hand completes a full rotation every 60 seconds,
+          while the minute hand advances smoothly as seconds increase.
         </p>
 
         <pre>
-r_{exactTime} = r_{ot} → T_{time}
+second hand endpoint = (4.5\sin(\theta_s), 4.5\cos(\theta_s))
+minute hand endpoint = (3.5\sin(\theta_m), 3.5\cos(\theta_m))
         </pre>
-
-        <p>
-          Try adjusting the parameters directly in the embedded Desmos calculator!
-        </p>
       </div>
     </section>
   </main>
@@ -58,5 +146,81 @@ r_{exactTime} = r_{ot} → T_{time}
   <footer>
     <p>© 2025 71papahijo</p>
   </footer>
+
+  <script>
+    const calculatorElement = document.getElementById("calculator");
+    const calculator = Desmos.GraphingCalculator(calculatorElement, {
+      expressions: true,
+      settingsMenu: false,
+      zoomButtons: true,
+      expressionsCollapsed: false
+    });
+
+    calculator.setMathBounds({
+      left: -6,
+      right: 6,
+      bottom: -6,
+      top: 6
+    });
+
+    function clampTimeValue(value) {
+      const number = Number(value);
+      if (Number.isNaN(number)) return 0;
+      return Math.max(0, Math.min(59, Math.floor(number)));
+    }
+
+    function updateClock() {
+      const minutesInput = document.getElementById("minutesInput");
+      const secondsInput = document.getElementById("secondsInput");
+
+      const m = clampTimeValue(minutesInput.value);
+      const s = clampTimeValue(secondsInput.value);
+
+      minutesInput.value = m;
+      secondsInput.value = s;
+
+      calculator.setExpression({ id: "m", latex: `m=${m}` });
+      calculator.setExpression({ id: "s", latex: `s=${s}` });
+
+      calculator.setExpression({
+        id: "theta_s",
+        latex: "\\theta_s=2\\pi\\frac{s}{60}"
+      });
+
+      calculator.setExpression({
+        id: "theta_m",
+        latex: "\\theta_m=2\\pi\\frac{m+s/60}{60}"
+      });
+
+      calculator.setExpression({
+        id: "clockFace",
+        latex: "x^2+y^2=25"
+      });
+
+      calculator.setExpression({
+        id: "centerPoint",
+        latex: "(0,0)"
+      });
+
+      calculator.setExpression({
+        id: "secondHand",
+        latex: "\\left[(0,0),\\left(4.5\\sin(\\theta_s),4.5\\cos(\\theta_s)\\right)\\right]"
+      });
+
+      calculator.setExpression({
+        id: "minuteHand",
+        latex: "\\left[(0,0),\\left(3.5\\sin(\\theta_m),3.5\\cos(\\theta_m)\\right)\\right]"
+      });
+
+      calculator.setExpression({ id: "mark12", latex: "(0,4.8)" });
+      calculator.setExpression({ id: "mark3", latex: "(4.8,0)" });
+      calculator.setExpression({ id: "mark6", latex: "(0,-4.8)" });
+      calculator.setExpression({ id: "mark9", latex: "(-4.8,0)" });
+    }
+
+    document.getElementById("setTimeButton").addEventListener("click", updateClock);
+
+    updateClock();
+  </script>
 </body>
 </html>
