@@ -127,7 +127,7 @@ body {
 
 .hero-grid {
   display: grid;
-  grid-template-columns: 1fr 200px;
+  grid-template-columns: 1fr auto;
   gap: 1rem;
   align-items: center;
 }
@@ -166,7 +166,7 @@ body {
 .hero-photo-wrap {
   width: 200px;
   height: 200px;
-  margin-left: -1rem;
+  margin-left: 0;
 }
 
 .hero-photo {
