@@ -39,6 +39,10 @@ body {
   margin: 0 auto;
 }
 
+.hero .container {
+  max-width: 900px;
+}
+
 .container.narrow {
   max-width: 800px;
 }
@@ -175,6 +179,8 @@ body {
   object-fit: cover;
   border-radius: 50%;
   display: block;
+  border: 6px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
 
 /* Sections */
