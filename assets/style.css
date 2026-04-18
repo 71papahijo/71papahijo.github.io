@@ -128,7 +128,7 @@ body {
 .hero-grid {
   display: grid;
   grid-template-columns: 1fr 200px;
-  gap: 3rem;
+  gap: 1rem;
   align-items: center;
 }
 
