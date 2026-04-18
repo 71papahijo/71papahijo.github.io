@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>71papahijo | Hello I Am, </title>
+  <title>71papahijo | Hello I Am</title>
   <link rel="stylesheet" href="./assets/style.css" />
 </head>
 <body>
@@ -18,8 +18,8 @@
       <ul class="nav-links">
         <li><a href="#about">About</a></li>
         <li><a href="#education">Education</a></li>
-        <li><a href="#skills">Skills</a></li>
         <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
       </ul>
     </div>
   </nav>
@@ -55,9 +55,13 @@
         <div class="section-header">
           <h2>About Me</h2>
         </div>
-        <p>
-          Empty Text
-        </p>
+        <div class="resume-block">
+          <p>
+            I am an Electrical Engineering student at the University of Virginia with interests in
+            embedded systems, digital design, programming, and applied mathematics. I enjoy building
+            technical projects that connect theory with practical implementation.
+          </p>
+        </div>
       </div>
     </section>
 
@@ -66,50 +70,29 @@
         <div class="section-header">
           <h2>Education</h2>
         </div>
-        <div class="info-card">
-          <h3>Univerity of Virginia</h3>
-          <p>Electrical Engineering</p>
-          <p>Expected graduation: Spring 2027</p>
-          <p>UVAccelerated program for completion of M.E. in Computer Engineering</p>
-          <p>Relevant Coursework: FPGA Design (Verilog), Digital Logic Design (VHDL), Computer Architecture, Computer Systems & Organization, Digital Signal Processing, Control Systems, Advanced Embedded Systems.</p>
-        </div>
-      </div>
-    </section>
 
-    <section class="section" id="interests">
-      <div class="container narrow">
-        <div class="section-header">
-          <h2>Interests</h2>
-        </div>
-        <div class="chip-list">
-          <span class="tag">Programming</span>
-          <span class="tag">FPGA Design</span>
-          <span class="tag">Digital Communications</span>
-          <span class="tag">Embedded Systems</span>
-          <span class="tag">Machine Learning</span>
-          <span class="tag">Interactive Learning Tools</span>
-        </div>
-      </div>
-    </section>
+        <div class="resume-block education-entry">
+          <div class="education-header">
+            <div>
+              <h3>University of Virginia, Charlottesville, VA</h3>
+              <p class="education-degree"><em>B.S. Electrical Engineering</em></p>
+            </div>
+            <p class="education-date">August 2023 – Present</p>
+          </div>
 
-    <section class="section" id="skills">
-      <div class="container narrow">
-        <div class="section-header">
-          <h2>Skills</h2>
-        </div>
-        <div class="skills-grid">
-          <div class="info-card">
-            <h3>Programming</h3>
-            <p>Python, C/C++, Unity C#, Java</p>
-          </div>
-          <div class="info-card">
-            <h3>Tools</h3>
-            <p>Multisim, KiCad, ModelSim, Cadence Virtuoso, Spectre, OCEAN, Siemens Calibre</p>
-          </div>
-          <div class="info-card">
-            <h3>Technical Areas</h3>
-            <p>Mathematical modeling, data analysis, visualization, problem solving</p>
-          </div>
+          <p>
+            <strong>Expected Graduation:</strong> Spring 2027
+          </p>
+
+          <p>
+            <strong>Honors:</strong> UVAccelerated program for completion of M.E. in Computer Engineering
+          </p>
+
+          <p>
+            <strong>Relevant Coursework:</strong> FPGA Design (Verilog), Digital Logic Design (VHDL),
+            Computer Architecture, Computer Systems &amp; Organization, Digital Signal Processing,
+            Control Systems, Advanced Embedded Systems.
+          </p>
         </div>
       </div>
     </section>
@@ -121,6 +104,30 @@
           <p>Selected work. Click a project to read more.</p>
         </div>
         <div class="projects-grid" id="projectsGrid"></div>
+      </div>
+    </section>
+
+    <section class="section" id="skills">
+      <div class="container narrow">
+        <div class="section-header">
+          <h2>Skills & Interests</h2>
+        </div>
+
+        <div class="resume-block skills-block">
+          <p>
+            <strong>Programming:</strong> Python, C/C++, Unity C#, Java
+          </p>
+          <p>
+            <strong>Tools:</strong> Multisim, KiCad, ModelSim, Cadence Virtuoso, Spectre, OCEAN, Siemens Calibre
+          </p>
+          <p>
+            <strong>Interests:</strong> FPGA Design, Digital Communications, Embedded Systems, Machine Learning,
+            Interactive Learning Tools
+          </p>
+          <p>
+            <strong>Technical Areas:</strong> Mathematical modeling, data analysis, visualization, problem solving
+          </p>
+        </div>
       </div>
     </section>
   </main>
