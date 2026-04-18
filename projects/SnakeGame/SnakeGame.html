@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FPGA Snake Game | 71papahijo</title>
+  <style>
+    :root {
+      --bg: #08111f;
+      --panel: rgba(13, 24, 43, 0.88);
+      --panel-2: rgba(18, 34, 61, 0.9);
+      --text: #e8f1ff;
+      --muted: #a8bbd8;
+      --line: rgba(130, 183, 255, 0.18);
+      --accent: #70b8ff;
+      --accent-2: #92f2ff;
+      --good: #7cf29a;
+      --warn: #ffd166;
+      --shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+      --radius: 24px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(112, 184, 255, 0.16), transparent 30%),
+        radial-gradient(circle at 85% 10%, rgba(146, 242, 255, 0.12), transparent 22%),
+        linear-gradient(180deg, #07101c 0%, #09182b 45%, #08111f 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: 0.22;
+      z-index: -1;
+      animation: drift 18s ease-in-out infinite;
+    }
+
+    body::before {
+      top: -120px;
+      left: -60px;
+      background: #53a8ff;
+    }
+
+    body::after {
+      right: -90px;
+      top: 220px;
+      background: #6bf6ff;
+      animation-delay: -9s;
+    }
+
+    @keyframes drift {
+      0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(10px, 28px, 0) scale(1.08); }
+    }
+
+    .container {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(7, 16, 28, 0.7);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+      gap: 1rem;
+    }
+
+    .brand {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .hero {
+      padding: 4.5rem 0 2.5rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 1.5rem;
+      align-items: stretch;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-copy {
+      padding: 2.25rem;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.5rem 0.8rem;
+      border: 1px solid rgba(146, 242, 255, 0.2);
+      border-radius: 999px;
+      color: var(--accent-2);
+      background: rgba(146, 242, 255, 0.08);
+      font-size: 0.82rem;
+      letter-spacing: 0.03em;
+      margin-bottom: 1rem;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      font-size: clamp(2.25rem, 4vw, 4.5rem);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      margin-bottom: 1rem;
+    }
+
+    .hero-copy p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      max-width: 62ch;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      margin-top: 1.6rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.9rem 1.2rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      color: #06101b;
+      background: linear-gradient(135deg, var(--accent-2), var(--accent));
+    }
+
+    .btn-secondary {
+      color: var(--text);
+      border-color: var(--line);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    .hero-media {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .hero-media img {
+      width: 100%;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.08);
+      display: block;
+      object-fit: cover;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .hero-media .caption {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+      padding: 0 0.25rem 0.25rem;
+    }
+
+    .stats {
+      padding: 0.75rem 0 0;
+    }
+
+    .stats-grid,
+    .overview-grid,
+    .state-grid,
+    .gallery-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .stat,
+    .overview-item,
+    .state-card,
+    .quote-card,
+    .gallery-card,
+    .resource-card {
+      padding: 1.25rem;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.8rem;
+      margin-bottom: 0.35rem;
+      letter-spacing: -0.04em;
+    }
+
+    .stat span,
+    .overview-item p,
+    .state-card p,
+    .quote-card p,
+    .resource-card p,
+    li {
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    section {
+      padding: 1rem 0 0.2rem;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.5rem, 3vw, 2.4rem);
+      letter-spacing: -0.04em;
+      margin-bottom: 0.2rem;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      max-width: 60ch;
+      margin-bottom: 0;
+      line-height: 1.65;
+    }
+
+    .overview-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .overview-item h3,
+    .state-card h3,
+    .gallery-card h3,
+    .resource-card h3 {
+      margin-bottom: 0.55rem;
+      font-size: 1.05rem;
+    }
+
+    .state-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .state-card img,
+    .gallery-card img {
+      width: 100%;
+      border-radius: 16px;
+      margin-top: 0.9rem;
+      border: 1px solid rgba(255,255,255,0.08);
+      display: block;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .state-list,
+    .resource-list {
+      padding-left: 1.1rem;
+      margin: 0.8rem 0 0;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 1rem;
+    }
+
+    .quote-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 100%;
+      background: linear-gradient(180deg, rgba(20, 35, 61, 0.95), rgba(10, 20, 35, 0.95));
+    }
+
+    .quote-card blockquote {
+      margin: 0;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: var(--text);
+    }
+
+    .quote-card strong {
+      color: var(--warn);
+    }
+
+    .gallery-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .gallery-card p { margin-bottom: 0; }
+
+    .resources {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      padding-bottom: 4rem;
+    }
+
+    .footer {
+      padding: 1.5rem 0 3rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .tag-row {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .tag {
+      padding: 0.5rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      font-size: 0.82rem;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .two-col,
+      .overview-grid,
+      .state-grid,
+      .gallery-grid,
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 3rem;
+      }
+
+      .hero-copy,
+      .hero-media {
+        padding: 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="../index.html">71papahijo</a>
+      <div class="nav-links">
+        <a href="#overview">Overview</a>
+        <a href="#fsm">FSM States</a>
+        <a href="#hardware">Hardware</a>
+        <a href="#gallery">Gallery</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="card hero-copy">
+          <div class="eyebrow">Digital Design • Verilog • VGA Output</div>
+          <h1>FPGA Snake Game</h1>
+          <p>
+            This project recreates Snake entirely in FPGA hardware, using a finite state machine to control game flow,
+            VGA output to draw the board, and switch-based input for movement. The final build renders a playable snake,
+            spawns apples through state-driven logic, and demonstrates how game behavior can be modeled directly in hardware.
+          </p>
+          <p>
+            A major part of the project was balancing gameplay features against the logic capacity of the FPGA. That meant
+            making deliberate tradeoffs in grid size, apple generation, and maximum snake length so the design would fit and remain stable.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#fsm">See FSM States</a>
+            <a class="btn btn-secondary" href="#hardware">Resource Constraints</a>
+          </div>
+          <div class="tag-row">
+            <span class="tag">FSM Driven</span>
+            <span class="tag">VGA 480×640</span>
+            <span class="tag">Wraparound Movement</span>
+            <span class="tag">Hardware Optimization</span>
+          </div>
+        </div>
+
+        <div class="card hero-media">
+          <img src="./apic5l.gif" alt="Animated demonstration of the FPGA Snake Game running on display" />
+          <div class="caption">
+            Working demo of the Snake game in action. The design updates the snake body, renders apples, and tracks the game state directly in hardware.
+          </div>
+        </div>
+      </div>
+
+      <div class="container stats">
+        <div class="stats-grid">
+          <div class="card stat">
+            <strong>3+</strong>
+            <span>Main gameplay states, including idle and end-state behavior.</span>
+          </div>
+          <div class="card stat">
+            <strong>480×640</strong>
+            <span>VGA output resolution used to render the game display.</span>
+          </div>
+          <div class="card stat">
+            <strong>110%+</strong>
+            <span>Peak logic usage in one version of the game logic before optimization.</span>
+          </div>
+          <div class="card stat">
+            <strong>1,399</strong>
+            <span>Reported ICESTORM logic cells available in the synthesis target shown during fitting.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="overview">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Project Overview</h2>
+            <p>
+              The game was inspired by a classic Snake implementation and built as a modular hardware project with separate logic for movement,
+              visuals, apple generation, and top-level integration.
+            </p>
+          </div>
+        </div>
+
+        <div class="overview-grid">
+          <div class="card overview-item">
+            <h3>Gameplay Goal</h3>
+            <p>
+              A green snake moves across the screen, grows as it eats apples, and ends the run when a finish condition is reached.
+              The project evolved from simple collision rules into a more polished version with screen wrapping and additional control states.
+            </p>
+          </div>
+
+          <div class="card overview-item">
+            <h3>Hardware Structure</h3>
+            <p>
+              The design was organized around a top module that connected movement controls, game logic, apple generation, and VGA display timing.
+              That modular setup made it easier to debug each subsystem independently.
+            </p>
+          </div>
+
+          <div class="card overview-item">
+            <h3>Key Tradeoffs</h3>
+            <p>
+              Because hardware resources were limited, the design traded off random apple generation, board size, and maximum snake length in exchange for a working implementation that could actually fit on the FPGA.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="fsm">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>FSM State Design</h2>
+            <p>
+              The finite state machine controls when the game is waiting, actively running, or showing a finished condition.
+              Two especially important states are <strong>idle</strong> and <strong>end</strong>, because they define the transitions into and out of gameplay.
+            </p>
+          </div>
+        </div>
+
+        <div class="state-grid">
+          <article class="card state-card">
+            <h3>Idle State</h3>
+            <p>
+              The <strong>idle</strong> state acts as the game's reset and waiting screen. In this state, the snake is not advancing through the playfield,
+              and the design can hold the initial position, clear stale movement data, and wait for the player to begin.
+            </p>
+            <ul class="state-list">
+              <li>Establishes a clean starting condition for the snake and apple logic.</li>
+              <li>Prevents unintended movement before player input is valid.</li>
+              <li>Provides a stable handoff into the running state once play begins.</li>
+            </ul>
+            <img src="./Idle.png" alt="Idle state visualization for the FPGA Snake Game" />
+          </article>
+
+          <article class="card state-card">
+            <h3>End State</h3>
+            <p>
+              The <strong>end</strong> state is reached when the game has finished, either because the snake hits a terminating condition or the win target has been reached.
+              Instead of continuing to update movement normally, the FSM locks the game into a final display condition so the result is visible to the player.
+            </p>
+            <ul class="state-list">
+              <li>Stops normal gameplay updates after a terminal event.</li>
+              <li>Lets the design show a clear visual indication that the run is over.</li>
+              <li>Creates a reliable point for restarting or returning to idle.</li>
+            </ul>
+            <img src="./End.png" alt="End state visualization for the FPGA Snake Game" />
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="hardware">
+      <div class="container two-col">
+        <div class="card resource-card">
+          <h2>FPGA Size and LUT Usage</h2>
+          <p>
+            One of the biggest engineering challenges in this project was simply fitting the game into the FPGA. An early version of the game logic alone exceeded the device capacity,
+            using more than <strong>110% of the available logic resources</strong>. The synthesis output also showed a failed placement attempt against a device with <strong>1,399 ICESTORM logic cells</strong>.
+          </p>
+          <p>
+            In practical terms, this meant the design had to be reduced and reorganized. The snake body was stored as an <strong>N × M register representation</strong>, where each cell tracked whether part of the body occupied that location.
+            That approach works well conceptually, but it becomes expensive in LUTs when the board grows larger and when the full body history has to be shifted every update.
+          </p>
+          <ul class="resource-list">
+            <li>The board indexing was downsized to reduce resource usage.</li>
+            <li>The maximum snake length was capped so the body array stayed manageable.</li>
+            <li>Apple generation moved to a deterministic FSM-based approach instead of a more expensive random system.</li>
+            <li>The final implementation prioritized fitting, timing clarity, and stable behavior over extra features.</li>
+          </ul>
+        </div>
+
+        <aside class="card quote-card">
+          <blockquote>
+            Fitting the design was not just a performance issue. It shaped the entire architecture of the game. Features like random apples,
+            a larger board, and a longer snake all had a direct hardware cost, so the final build reflects a set of deliberate logic-budget decisions.
+          </blockquote>
+        </aside>
+      </div>
+    </section>
+
+    <section>
+      <div class="container two-col">
+        <div class="card resource-card">
+          <h3>Implementation Challenges</h3>
+          <p>
+            Two bugs had a large impact on the final design. First, apples could appear on top of the snake body, which made gameplay inconsistent.
+            Second, body shifting originally happened before the tail update, which left incorrect body fragments behind on the screen.
+          </p>
+          <p>
+            Fixing those issues required enforcing the correct update sequence in hardware. That improved correctness, but it also increased the design effort and reinforced the importance of clean state transitions between movement, growth, and rendering.
+          </p>
+        </div>
+
+        <div class="card resource-card">
+          <h3>Final Result</h3>
+          <p>
+            The finished project demonstrates a playable Snake game on FPGA with VGA output, switch controls, apple spawning logic, and explicit state transitions.
+            Even with resource constraints, it shows how a familiar game can be rethought as a digital design problem involving control flow, storage, synchronization, and optimization.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Project Gallery</h2>
+            <p>
+              These visuals highlight the system structure and the implementation issues that shaped the final version of the game.
+            </p>
+          </div>
+        </div>
+
+        <div class="gallery-grid">
+          <article class="card gallery-card">
+            <h3>System Diagram</h3>
+            <p>
+              High-level view of the project architecture, showing how the top module coordinates movement logic, apple generation, game state, and VGA visuals.
+            </p>
+            <img src="./Diagram.png" alt="Architecture diagram for the FPGA Snake Game project" />
+          </article>
+
+          <article class="card gallery-card">
+            <h3>Logic Resource Limitation</h3>
+            <p>
+              Compiler output from an over-capacity build attempt. This is the hardware constraint that forced the design to shrink the board representation and simplify logic-heavy features.
+            </p>
+            <img src="./logic-error.png" alt="Synthesis error showing limited FPGA logic cells for the Snake Game project" onerror="this.style.display='none'" />
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      Built from a course FPGA project focused on finite state machines, VGA rendering, and hardware-aware design tradeoffs.
+    </div>
+  </footer>
+</body>
+</html>

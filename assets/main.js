@@ -1,5 +1,12 @@
 const projects = [
   {
+    title: "FPGA Snake Game",
+    description: "A Snake game built on FPGA using FSM states (idle, running, end), VGA output, and optimized for limited LUT resources.",
+    image: "./projects/SnakeGame/apic5l.gif",   
+    tags: ["FPGA", "Verilog", "FSM", "VGA"],
+    href: "./projects/SnakeGame/SnakeGame.html"
+  },
+  {
     title: "Interactive Desmos Clock",
     description: "A clock built in Desmos using dynamic expressions and parameter-based control of the hands.",
     image: "./projects/DesmosClock/Poster.png",
