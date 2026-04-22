@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>U-Net & U-Net++ | 71papahijo</title>
+
+  <!-- SAME CSS (correct path) -->
+  <link rel="stylesheet" href="../ProjectsStyle.css" />
+</head>
+
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="https://71papahijo.github.io/index.html">← Back to Main Page</a>
+      <div class="nav-links">
+        <a href="#architecture">Architecture</a>
+        <a href="#comparison">Model Comparison</a>
+        <a href="#results">Results</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container hero-grid">
+
+        <div class="card hero-media hero-media-large">
+          <img src="./fig_UNet.png" alt="U-Net Architecture" />
+        </div>
+
+        <div class="card hero-copy">
+          <div class="eyebrow">Deep Learning • Medical Imaging • Segmentation</div>
+          <h1>U-Net vs U-Net++</h1>
+
+          <p>
+            This project explores brain tumor segmentation using convolutional neural networks,
+            comparing U-Net and U-Net++ architectures on MRI datasets.
+          </p>
+
+          <p>
+            The goal is to understand how architectural complexity and dataset size affect
+            segmentation accuracy using IoU and Dice metrics.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#comparison">See Architecture</a>
+            <a class="btn btn-primary" href="#results">View Results</a>
+          </div>
+
+          <div class="tag-row">
+            <span class="tag">U-Net</span>
+            <span class="tag">U-Net++</span>
+            <span class="tag">IoU</span>
+            <span class="tag">Dice Score</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ARCHITECTURE -->
+    <section id="architecture" class="section-block">
+      <div class="container">
+        <div class="card feature-card">
+
+          <div class="feature-text">
+            <h2>Model Architecture</h2>
+
+            <p>
+              U-Net is a convolutional encoder-decoder network designed for biomedical image segmentation,
+              combining low-level spatial information with high-level semantic features using skip connections.
+            </p>
+
+            <p>
+              U-Net++ improves this design by introducing dense skip connections and intermediate nodes,
+              allowing better multi-scale feature aggregation and more flexible depth selection.
+            </p>
+          </div>
+
+          <div class="feature-visual">
+            <img src="./fig_UNet++.png" alt="U-Net++ Architecture" />
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPARISON -->
+    <section id="comparison" class="section-block">
+      <div class="container">
+        <div class="card section-card">
+
+          <div class="section-head">
+            <h2>Model Comparison</h2>
+            <p>
+              U-Net uses direct skip connections, while U-Net++ introduces nested skip pathways
+              to improve feature fusion and segmentation accuracy.
+            </p>
+          </div>
+
+          <div class="state-grid">
+
+            <article class="state-panel">
+              <div class="state-text">
+                <h3>U-Net</h3>
+                <p>
+                  A simpler encoder-decoder architecture with direct skip connections between matching layers.
+                </p>
+                <ul class="state-list">
+                  <li>Faster training</li>
+                  <li>Lower complexity</li>
+                  <li>Works well on small datasets</li>
+                </ul>
+              </div>
+              <div class="state-image-wrap">
+                <img src="./fig_UNet.png" alt="U-Net Diagram" />
+              </div>
+            </article>
+
+            <article class="state-panel">
+              <div class="state-text">
+                <h3>U-Net++</h3>
+                <p>
+                  Extends U-Net with dense skip connections and intermediate feature maps for better performance.
+                </p>
+                <ul class="state-list">
+                  <li>Better feature aggregation</li>
+                  <li>Handles complex segmentation</li>
+                  <li>Higher risk of overfitting on small data</li>
+                </ul>
+              </div>
+              <div class="state-image-wrap">
+                <img src="./fig_UNet++.png" alt="U-Net++ Diagram" />
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section id="results" class="section-block">
+      <div class="container">
+        <div class="card section-card">
+
+          <div class="section-head">
+            <h2>Training Results</h2>
+            <p>
+              Performance was evaluated using Dice score and Intersection over Union (IoU).
+              Results show how dataset size impacts model effectiveness.
+            </p>
+          </div>
+
+          <div class="constraints-grid">
+
+            <div class="constraint-text">
+              <p>
+                U-Net demonstrated more stable performance on smaller datasets,
+                while U-Net++ required larger datasets to fully utilize its architecture.
+              </p>
+
+              <p>
+                Data augmentation improved performance for both models, but U-Net benefited more
+                due to its simpler structure.
+              </p>
+
+              <ul class="resource-list">
+                <li>U-Net performs better on limited data</li>
+                <li>U-Net++ excels with large datasets</li>
+                <li>Dice score captures overlap accuracy</li>
+                <li>IoU penalizes over-segmentation</li>
+              </ul>
+            </div>
+
+            <div class="constraint-visual">
+              <img src="./TrainingLossUNET.png" alt="Training Loss Graph" />
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      Machine Learning project exploring segmentation architectures for medical imaging.
+    </div>
+  </footer>
+</body>
+</html>
