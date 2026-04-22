@@ -2,7 +2,7 @@ const projects = [
   {
     title: "FPGA Snake Game",
     description: "A Snake game built on FPGA using FSM states (idle, running, end), VGA output, and optimized for limited LUT resources.",
-    image: "./projects/SnakeGame/apic5l.gif",   
+    image: "./projects/SnakeGame/apic5l.gif",
     tags: ["FPGA", "Verilog", "FSM", "VGA"],
     href: "./projects/SnakeGame/SnakeGame.html"
   },
@@ -14,11 +14,11 @@ const projects = [
     href: "./projects/DesmosClock/DesmosClock.html"
   },
   {
-    title: "Next Project",
-    description: "This card is ready for the next project you want to add.",
-    image: "./assets/Images/profile.png",
-    tags: ["Template"],
-    href: "./projects/empty.html"
+    title: "U-Net vs U-Net++",
+    description: "A medical image segmentation project comparing U-Net and U-Net++ on brain tumor MRI data using IoU, Dice score, and training loss.",
+    image: "./projects/UNET/fig_UNet.png",
+    tags: ["Machine Learning", "U-Net", "U-Net++", "Medical Imaging"],
+    href: "./projects/UNET/UNET.html"
   }
 ];
 
